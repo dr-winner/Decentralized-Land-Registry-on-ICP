@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from 'react';
+import RegisterLandModal from './RegisterLandModal';
+import VerifyOwnershipModal from './VerifyOwnershipModal';
 import {
   Globe2,
   Shield,
@@ -9,6 +11,9 @@ import {
 } from "lucide-react";
 
 export default function Hero() {
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [isVerifyOpen, setIsVerifyOpen] = useState(false);
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900">
       <div className="absolute inset-0">
@@ -29,20 +34,20 @@ export default function Hero() {
           </p>
           <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
             <div className="rounded-md shadow">
-              <a
-                href="#"
+              <button
+                onClick={() => setIsRegisterOpen(true)}
                 className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 md:py-4 md:text-lg md:px-10 transition-all transform hover:scale-105"
               >
                 Register Land
-              </a>
+              </button>
             </div>
             <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-              <a
-                href="#"
+            <button
+                onClick={() => setIsVerifyOpen(true)}
                 className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-500 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10 transition-all transform hover:scale-105"
               >
-                Check Owner
-              </a>
+                Verify Ownership
+              </button>
             </div>
           </div>
         </div>
@@ -126,6 +131,8 @@ export default function Hero() {
           </div>
         </div>
       </div>
+      <RegisterLandModal isOpen={isRegisterOpen} setIsOpen={setIsRegisterOpen} />
+      <VerifyOwnershipModal isOpen={isVerifyOpen} setIsOpen={setIsVerifyOpen} />
     </div>
   );
 }

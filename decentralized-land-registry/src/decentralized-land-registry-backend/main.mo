@@ -15,12 +15,12 @@ type LandRecord = {
 // Define the main actor for the land registry
 actor LandRegistry {
     // Use a HashMap to store land records
-    private var records: HashMap<Nat, LandRecord> = HashMap<Nat, LandRecord>();
+    private var records = HashMap<Nat, LandRecord>();
 
     // Method to register land
     public func registerLand(id: Nat, location: Text, size: Nat, value: Nat): async Text {
         // Check if the land ID already exists
-        if (HashMap.contains(records, id)) {
+        if (records.contains(id)) {
             return "Land ID already exists.";
         };
 
@@ -33,13 +33,13 @@ actor LandRegistry {
             history = ["Registered by " # Principal.toText(msg.caller)];
         };
 
-        records := HashMap.put(records, id, newRecord);
+        records.put(id, newRecord);
         return "Land registered successfully.";
     };
 
     // Method to transfer ownership of land
     public func transferOwnership(id: Nat, newOwner: Principal): async Text {
-        switch (HashMap.get(records, id)) {
+        switch (records.get(id)) {
             case (null) { return "Land ID not found."; };
             case (some(record)) {
                 // Check if the caller is the current owner
@@ -54,10 +54,10 @@ actor LandRegistry {
                     location = record.location;
                     size = record.size;
                     value = record.value;
-                    history = record.history # ("Transferred to " # Principal.toText(newOwner));
+                    history = record.history # ["Transferred to " # Principal.toText(newOwner)];
                 };
 
-                records := HashMap.put(records, id, updatedRecord);
+                records.put(id, updatedRecord);
                 return "Ownership transferred successfully.";
             };
         }
@@ -65,12 +65,12 @@ actor LandRegistry {
 
     // Method to retrieve a land record by ID
     public query func getLandRecord(id: Nat): async ?LandRecord {
-        return HashMap.get(records, id);
+        return records.get(id);
     }
 
     // Method to get the history of a land record
     public query func getLandHistory(id: Nat): async ?[Text] {
-        switch (HashMap.get(records, id)) {
+        switch (records.get(id)) {
             case (null) { return null; }; // Land ID not found
             case (some(record)) { return record.history; }; // Return the history
         }
