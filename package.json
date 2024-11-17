@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@dfinity/auth-client": "^2.1.3"
+  }
+}
